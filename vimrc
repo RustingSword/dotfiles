@@ -90,7 +90,11 @@ syntax on
 "set autochdir
 
 "set colorscheme
-colo slate
+if has('gui_running')
+    colo torte
+else
+    colo slate
+endif
 
 "set encoding
 set encoding=utf-8
@@ -105,7 +109,7 @@ if has("win32")
 	au GUIEnter * simalt ~x
 else
 	set fileencoding=utf-8
-	set guifont=DejaVu\ Sans\ Mono\ 10
+	set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 11
 endif
 "set guifont=Terminus:h12
 
@@ -183,11 +187,14 @@ let g:cal_exit_onlywindow=1
 "Template of diary
 "autocmd BufNewFile *.txt read $vimruntime\templates\diary.tpl | normal ggdd
 
+"set LanguageTool
+let g:languagetool_jar='~/.langcheck/LanguageTool.jar'
 
 "---------------------------------------
 "Other Settings
 "---------------------------------------
 
+command W w !sudo tee % > /dev/null
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
 let &guioptions = substitute(&guioptions, "t", "", "g")

@@ -179,10 +179,13 @@ let g:miniBufExplMapWindowNavVim = 1
 
 "set Calendar
 map <Leader>ca :Calendar<CR>
-let g:calendar_diary="~/diary"
+"let g:calendar_diary="~/diary"
 let g:calendar_navi='top'
 let g:calendar_mark='right'
 let g:cal_exit_onlywindow=1
+
+"set Vimwiki
+nmap <Leader>td :VimwikiToggleListItem<CR>
 
 "Template of diary
 "autocmd BufNewFile *.txt read $vimruntime\templates\diary.tpl | normal ggdd

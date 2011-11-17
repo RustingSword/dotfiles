@@ -24,7 +24,7 @@ nmap <Leader>ev :e! ~/.vimrc<CR>
 "insert current time
 map <F6> <Esc>a<c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr><Esc>
 "reload vimrc when it's edited
-autocmd! bufwritepost vimrc source ~/.vimrc
+autocmd! bufwritepost .vimrc source ~/.vimrc
 
 map <c-j> <c-w>j
 map <c-k> <c-w>k

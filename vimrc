@@ -20,15 +20,14 @@ set autowrite
 set nobackup
 set noswapfile
 
-"fast editing vimrc
-if has("win32")
-    nmap <Leader>ev :e! ~/_vimrc<CR>
-else
-    nmap <Leader>ev :e! ~/.vimrc<CR>
-endif
-
+" Some key maps
+"
 "insert current time
 map <F6> <Esc>a<c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr><Esc>
+
+"fast editing vimrc
+nmap <Leader>ev :e $MYVIMRC<CR>
+
 "reload vimrc when it's edited
 autocmd! bufwritepost vimrc source $MYVIMRC
 
@@ -38,7 +37,9 @@ nmap <Space> <c-f>
 "VIM user interface
 "--------------------------------------------------
 
-colo slate
+"set colorscheme
+colo torte
+
 set showcmd		" display incomplete commands
 set go-=T
 "set 7 lines to the cursors
@@ -88,7 +89,6 @@ set omnifunc=syntaxcomplete#Complete
 "set bsdir=buffer
 "set autochdir
 
-"set colorscheme
 
 "set encoding
 set encoding=utf-8
@@ -100,16 +100,12 @@ if has("win32")
 	"set guifontwide=YaHei\ Consolas\ Hybrid:h9
 	"set guifont=Yahei\ Consolas\ Hybrid:h10
 	"set fileencoding=chinese  
-	set fileencoding=utf-8
 	au GUIEnter * simalt ~x
 else
-	set fileencoding=utf-8
 	set guifont=Monaco\ 12
 endif
-"set guifont=Terminus:h12
 
 "set statusline
-"set statusline=%f\ %m%r\ [%{strftime('%Y-%m-%d',getftime(expand('%')))}]%= 
 "via http://www.douban.com/group/topic/15580471/
 set laststatus=2
 "" 状态栏各个状态
@@ -174,10 +170,13 @@ let g:miniBufExplMapWindowNavVim = 1
 
 "set Calendar
 map <Leader>ca :Calendar<CR>
-let g:calendar_diary="~/diary"
+"let g:calendar_diary="~/diary"
 let g:calendar_navi='top'
 let g:calendar_mark='right'
 let g:cal_exit_onlywindow=1
+
+"set LanguageTool
+let g:languagetool_jar='~/.langcheck/LanguageTool.jar'
 
 " This tests to see if vim was configured with the '--enable-cscope' option
 " when it was compiled.  If it wasn't, time to recompile vim... 

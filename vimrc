@@ -38,7 +38,7 @@ nmap <Space> <c-f>
 "--------------------------------------------------
 
 "set colorscheme
-colo torte
+colo slate
 
 set showcmd		" display incomplete commands
 set go-=T

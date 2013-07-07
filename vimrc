@@ -8,6 +8,7 @@ call vundle#rc()
 
 Bundle 'gmarik/vundle'
 
+Bundle 'calendar.vim--Matsumoto'
 Bundle 'taglist.vim'
 Bundle 'LanguageTool'
 Bundle 'minibufexpl.vim'

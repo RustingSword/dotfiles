@@ -1,9 +1,25 @@
 " Vim settings
 
+"Call Vundle
+set nocompatible " be iMproved
+filetype off " required!
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+Bundle 'gmarik/vundle'
+
+Bundle 'taglist.vim'
+Bundle 'LanguageTool'
+Bundle 'minibufexpl.vim'
+Bundle 'FencView.vim'
+Bundle 'vimwiki'
+Bundle 'ledger/vim-ledger'
+
 "-----------------------------------------
 "General Settings
 "-----------------------------------------
 
+filetype plugin indent on
 set nocompatible
 syntax on
 "set history lines vim is to remember
@@ -155,7 +171,6 @@ map <Leader>tl :TlistOpen<CR>
 map <Leader>nt :NERDTree<CR>
 
 "set LaTeX-Suit
-filetype plugin indent on
 set shellslash
 let g:tex_flavor='latex'
 "set sw=2

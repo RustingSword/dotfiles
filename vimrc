@@ -1,6 +1,9 @@
 " Vim settings
 
-"Call Vundle
+"-----------------------------------------
+" Using Vundle to manage all the plugins
+"-----------------------------------------
+
 set nocompatible " be iMproved
 filetype off " required!
 set rtp+=~/.vim/bundle/vundle/
@@ -15,6 +18,13 @@ Bundle 'minibufexpl.vim'
 Bundle 'FencView.vim'
 Bundle 'vimwiki'
 Bundle 'ledger/vim-ledger'
+Bundle 'kien/ctrlp.vim'
+Bundle 'scrooloose/syntastic'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'scrooloose/nerdtree'
+Bundle 'majutsushi/tagbar'
+Bundle 'tpope/vim-fugitive'
 
 "-----------------------------------------
 "General Settings
@@ -98,7 +108,7 @@ set ai " auto indent
 set si " smart indent
 set ambiwidth=double
 set cindent
-set nowb
+set nowb " no write backup
 set omnifunc=syntaxcomplete#Complete
 "set patchmode=.orig	"backup the original file with a ext name .orig
 
@@ -156,16 +166,22 @@ language messages zh_CN.utf-8
 "About Plugins
 "------------------------------------------
 
+" customize PowerLine
+
+" call Pl#Theme#InsertSegment('charcode', 'after', 'filetype')
+
 "commands of fencview plugin
 nmap <Leader>fa :FencAutoDetect<CR>
 nmap <Leader>fv :FencView<CR>
 
+" set TagBar
+map <Leader>tb :Tagbar<CR>
 "set Tag List Plugin
-let Tlist_Use_Right_Window=1
+"let Tlist_Use_Right_Window=1
 "let Tlist_File_Fold_Auto_Close=1
 "let Tlist_WinWidth=35
-let Tlist_Exit_OnlyWindow=1
-map <Leader>tl :TlistOpen<CR>
+"let Tlist_Exit_OnlyWindow=1
+"map <Leader>tl :TlistOpen<CR>
 
 "set NERDTree
 
@@ -186,7 +202,6 @@ let g:miniBufExplMapWindowNavVim = 1
 
 "set Calendar
 map <Leader>ca :Calendar<CR>
-"let g:calendar_diary="~/diary"
 let g:calendar_navi='top'
 let g:calendar_mark='right'
 let g:cal_exit_onlywindow=1

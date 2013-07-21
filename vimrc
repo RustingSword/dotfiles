@@ -11,20 +11,25 @@ call vundle#rc()
 
 Bundle 'gmarik/vundle'
 
-Bundle 'calendar.vim--Matsumoto'
-Bundle 'taglist.vim'
+"Bundle 'calendar.vim--Matsumoto'
+Bundle 'mattn/calendar-vim'
+"Bundle 'taglist.vim'
 Bundle 'LanguageTool'
-Bundle 'minibufexpl.vim'
+"Bundle 'minibufexpl.vim'
+Bundle 'fholgado/minibufexpl.vim'
 Bundle 'FencView.vim'
 Bundle 'vimwiki'
-Bundle 'ledger/vim-ledger'
+"Bundle 'ledger/vim-ledger'
 Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/syntastic'
-Bundle 'Lokaltog/vim-powerline'
+"Bundle 'Lokaltog/vim-powerline'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 Bundle 'majutsushi/tagbar'
-Bundle 'tpope/vim-fugitive'
+Bundle 'gerw/vim-latex-suite'
+"Bundle 'tpope/vim-fugitive'
+"Bundle 'MarcWeber/ultisnips'
+"Bundle 'honza/vim-snippets'
 
 "-----------------------------------------
 "General Settings
@@ -56,7 +61,7 @@ map <F6> <Esc>a<c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr><Esc>
 nmap <Leader>ev :e $MYVIMRC<CR>
 
 "reload vimrc when it's edited
-autocmd! bufwritepost vimrc source $MYVIMRC
+autocmd! bufwritepost .vimrc source $MYVIMRC
 
 nmap <Space> <c-f>
 
@@ -176,6 +181,7 @@ nmap <Leader>fv :FencView<CR>
 
 " set TagBar
 map <Leader>tb :Tagbar<CR>
+let g:tagbar_sort=0 "sort the tags according to their order in the source file
 "set Tag List Plugin
 "let Tlist_Use_Right_Window=1
 "let Tlist_File_Fold_Auto_Close=1
@@ -193,8 +199,22 @@ let g:tex_flavor='latex'
 "set sw=2
 set iskeyword+=:
 
+" search the word under cursor
+function! SearchWord()
+    let expr = '!sdcv -n ' .expand("<cword>") .' | grep -v "\*" | less'
+    exec expr
+endfunction
+nmap <Leader>d :call SearchWord()<CR>
+" forward search for tex files
+function! SyncTexForward()
+    let s:syncfile = fnamemodify(fnameescape(Tex_GetMainFileName()), ":r").".pdf"
+    let execstr = "silent !okular --unique ".s:syncfile."\\#src:".line(".").expand("%\:p").' &'
+    exec execstr
+endfunction
+nmap <Leader>f :call SyncTexForward()<CR>
+
 "set SuperTab
-let g:SuperTabRetainCompletionType=2
+"let g:SuperTabRetainCompletionType=2
 
 "set MiniBufExplorer
 let g:miniBufExplMapCTabSwitchBufs = 1 
@@ -205,6 +225,9 @@ map <Leader>ca :Calendar<CR>
 let g:calendar_navi='top'
 let g:calendar_mark='right'
 let g:cal_exit_onlywindow=1
+
+"integrate calendar with vimwiki
+let g:vimwiki_use_calendar=1
 
 "set LanguageTool
 let g:languagetool_jar='~/.langcheck/LanguageTool.jar'

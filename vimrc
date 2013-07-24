@@ -42,8 +42,8 @@ syntax on
 set history=300
 
 "set mapleader
-let mapleader = ";"
-let g:mapleader = ";"
+let mapleader = ';'
+let g:mapleader = ';'
 
 "auto read when files are changed
 set autoread
@@ -199,12 +199,39 @@ let g:tex_flavor='latex'
 "set sw=2
 set iskeyword+=:
 
-" search the word under cursor
+" translate the word under cursor
 function! SearchWord()
-    let expr = '!sdcv -n ' .expand("<cword>") .' | grep -v "\*" | less'
+    let expr = '!ydcv -s ' .expand("<cword>")
     exec expr
 endfunction
-nmap <Leader>d :call SearchWord()<CR>
+
+" translate selected text
+function! SearchWord_v(type, ...)
+    let sel_save = &selection
+    let &selection = "inclusive"
+    let reg_save = @@
+
+    if a:0
+        silent exe "normal! `<" . a:type . "`>y"
+    elseif a:type == 'line'
+        silent exe "normal! '[V']y"
+    elseif a:type == 'block'
+        silent exe "normal! `[\<C-V>`]y"
+    else
+        silent exe "normal! `[v`]y"
+    endif
+
+    let word = @@
+    let expr = '!ydcv -s "' . word . '"'
+    exec expr
+
+    let &selection = sel_save
+    let @@ = reg_save
+endfunction
+
+nnoremap <Leader>d :call SearchWord()<CR>
+vnoremap <Leader>d :<C-U>call SearchWord_v(visualmode(), 1)<cr>
+
 " forward search for tex files
 function! SyncTexForward()
     let s:syncfile = fnamemodify(fnameescape(Tex_GetMainFileName()), ":r").".pdf"

@@ -1,5 +1,8 @@
 " Vim settings
 
+" set shell if using fish
+set shell=/bin/bash
+
 "-----------------------------------------
 " Using Vundle to manage all the plugins
 "-----------------------------------------
@@ -120,7 +123,8 @@ set omnifunc=syntaxcomplete#Complete
 "set dir to current
 "set bsdir=buffer
 "set autochdir
-
+"highlight OverLength ctermbg=darkred ctermfg=white guibg=#FFD9D9
+"match OverLength /\%>80v.\+/
 
 "set encoding
 set encoding=utf-8

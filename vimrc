@@ -14,9 +14,7 @@ call vundle#rc()
 
 Bundle 'gmarik/vundle'
 
-"Bundle 'calendar.vim--Matsumoto'
 Bundle 'mattn/calendar-vim'
-"Bundle 'taglist.vim'
 Bundle 'LanguageTool'
 "Bundle 'minibufexpl.vim'
 Bundle 'fholgado/minibufexpl.vim'
@@ -24,13 +22,31 @@ Bundle 'FencView.vim'
 Bundle 'vimwiki'
 "Bundle 'ledger/vim-ledger'
 Bundle 'kien/ctrlp.vim'
+
+" real-time syntax checking
 Bundle 'scrooloose/syntastic'
-"Bundle 'Lokaltog/vim-powerline'
+Bundle 'Lokaltog/vim-powerline'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
-Bundle 'majutsushi/tagbar'
+
+" replace taglist
+Bundle 'majutsushi/tagbar'            
 Bundle 'gerw/vim-latex-suite'
-"Bundle 'tpope/vim-fugitive'
+
+" integrate git into vim
+Bundle 'tpope/vim-fugitive'
+
+" colorlize matching parentheses
+Bundle 'kien/rainbow_parentheses.vim' 
+
+" visualize undolist
+Bundle 'sjl/gundo.vim.git'     
+
+" add/delete/change parentheses
+Bundle 'tpope/vim-surround'    
+
+" use ctrl-a ctrl-x to change date/time
+Bundle 'tpope/vim-speeddating' 
 "Bundle 'MarcWeber/ultisnips'
 "Bundle 'honza/vim-snippets'
 
@@ -71,6 +87,7 @@ nmap <Space> <c-f>
 "--------------------------------------------------
 "VIM user interface
 "--------------------------------------------------
+set t_Co=256
 
 "set colorscheme
 colo slate
@@ -138,13 +155,13 @@ if has("win32")
 	"set fileencoding=chinese  
 	au GUIEnter * simalt ~x
 else
-	set guifont=Monaco\ 12
+	set guifont=UbuntuMono\ 12
 endif
 
 "set statusline
 "via http://www.douban.com/group/topic/15580471/
 set laststatus=2
-"" 状态栏各个状态
+" 状态栏各个状态
 let statusHead ="%-.50f\ %h%m%r"
 let statusBreakPoint ="%<"
 let statusSeparator ="|"
@@ -177,7 +194,7 @@ language messages zh_CN.utf-8
 
 " customize PowerLine
 
-" call Pl#Theme#InsertSegment('charcode', 'after', 'filetype')
+call Pl#Theme#InsertSegment('charcode', 'after', 'filetype')
 
 "commands of fencview plugin
 nmap <Leader>fa :FencAutoDetect<CR>
@@ -192,6 +209,9 @@ let g:tagbar_sort=0 "sort the tags according to their order in the source file
 "let Tlist_WinWidth=35
 "let Tlist_Exit_OnlyWindow=1
 "map <Leader>tl :TlistOpen<CR>
+
+" set Gundo
+nmap <Leader>u :GundoToggle<CR>
 
 "set NERDTree
 

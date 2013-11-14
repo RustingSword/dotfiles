@@ -25,28 +25,30 @@ Bundle 'kien/ctrlp.vim'
 
 " real-time syntax checking
 Bundle 'scrooloose/syntastic'
-Bundle 'Lokaltog/vim-powerline'
+
+Bundle 'bling/vim-airline'
+"Bundle 'Lokaltog/vim-powerline'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 
 " replace taglist
-Bundle 'majutsushi/tagbar'            
+Bundle 'majutsushi/tagbar'
 Bundle 'gerw/vim-latex-suite'
 
 " integrate git into vim
 Bundle 'tpope/vim-fugitive'
 
 " colorlize matching parentheses
-Bundle 'kien/rainbow_parentheses.vim' 
+Bundle 'kien/rainbow_parentheses.vim'
 
 " visualize undolist
-Bundle 'sjl/gundo.vim.git'     
+Bundle 'sjl/gundo.vim.git'
 
 " add/delete/change parentheses
-Bundle 'tpope/vim-surround'    
+Bundle 'tpope/vim-surround'
 
 " use ctrl-a ctrl-x to change date/time
-Bundle 'tpope/vim-speeddating' 
+Bundle 'tpope/vim-speeddating'
 "Bundle 'MarcWeber/ultisnips'
 "Bundle 'honza/vim-snippets'
 
@@ -90,7 +92,7 @@ nmap <Space> <c-f>
 set t_Co=256
 
 "set colorscheme
-colo slate
+colo zenburn
 
 set showcmd		" display incomplete commands
 set go-=T
@@ -127,7 +129,7 @@ set tabstop=4
 set smarttab
 
 set lbr
-set tw=500
+set tw=80
 
 set ai " auto indent
 set si " smart indent
@@ -148,14 +150,14 @@ set encoding=utf-8
 set fileencodings=utf-8,cp936,gb18030,big5,latin-1
 "set font
 if has("win32")
-	"set guifont=Courier_New:h10:cANSI
-	"set guifont=Terminus:h12
-	"set guifontwide=YaHei\ Consolas\ Hybrid:h9
-	"set guifont=Yahei\ Consolas\ Hybrid:h10
-	"set fileencoding=chinese  
-	au GUIEnter * simalt ~x
+    "set guifont=Courier_New:h10:cANSI
+    "set guifont=Terminus:h12
+    "set guifontwide=YaHei\ Consolas\ Hybrid:h9
+    "set guifont=Yahei\ Consolas\ Hybrid:h10
+    "set fileencoding=chinese
+    au GUIEnter * simalt ~x
 else
-	set guifont=UbuntuMono\ 12
+    set guifont=UbuntuMono\ 12
 endif
 
 "set statusline
@@ -178,11 +180,10 @@ let statusTime ="%{strftime(\"%Y-%m-%d\",getftime(expand(\"%\")))}"
 let statusEnd=statusKeymap."\ ".statusEncoding.statusRuler."\ ".statusTime
 "" 最终状态栏的模式字符串
 let statusString=statusHead.statusBody.statusBlank.statusEnd
-set statusline=%!statusString 
-
+set statusline=%!statusString
 " Encoding related
 "set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
-  
+
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 language messages zh_CN.utf-8
@@ -192,10 +193,6 @@ language messages zh_CN.utf-8
 "About Plugins
 "------------------------------------------
 
-" customize PowerLine
-
-call Pl#Theme#InsertSegment('charcode', 'after', 'filetype')
-
 "commands of fencview plugin
 nmap <Leader>fa :FencAutoDetect<CR>
 nmap <Leader>fv :FencView<CR>
@@ -203,12 +200,6 @@ nmap <Leader>fv :FencView<CR>
 " set TagBar
 map <Leader>tb :Tagbar<CR>
 let g:tagbar_sort=0 "sort the tags according to their order in the source file
-"set Tag List Plugin
-"let Tlist_Use_Right_Window=1
-"let Tlist_File_Fold_Auto_Close=1
-"let Tlist_WinWidth=35
-"let Tlist_Exit_OnlyWindow=1
-"map <Leader>tl :TlistOpen<CR>
 
 " set Gundo
 nmap <Leader>u :GundoToggle<CR>
@@ -268,8 +259,8 @@ nmap <Leader>f :call SyncTexForward()<CR>
 "let g:SuperTabRetainCompletionType=2
 
 "set MiniBufExplorer
-let g:miniBufExplMapCTabSwitchBufs = 1 
-let g:miniBufExplMapWindowNavVim = 1 
+let g:miniBufExplMapCTabSwitchBufs = 1
+let g:miniBufExplMapWindowNavVim = 1
 
 "set Calendar
 map <Leader>ca :Calendar<CR>
@@ -284,7 +275,7 @@ let g:vimwiki_use_calendar=1
 let g:languagetool_jar='~/.langcheck/LanguageTool.jar'
 
 " This tests to see if vim was configured with the '--enable-cscope' option
-" when it was compiled.  If it wasn't, time to recompile vim... 
+" when it was compiled.  If it wasn't, time to recompile vim...
 if has("cscope")
 
     " use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
@@ -296,14 +287,14 @@ if has("cscope")
 
     " add any cscope database in current directory
     if filereadable("cscope.out")
-        cs add cscope.out  
-    " else add the database pointed to by environment variable 
+        cs add cscope.out
+        " else add the database pointed to by environment variable
     elseif $CSCOPE_DB != ""
         cs add $CSCOPE_DB
     endif
 
     " show msg when any other cscope db added
-    set cscopeverbose  
+    set cscopeverbose
 
     "   's'   symbol: find all references to the token under cursor
     "   'g'   global: find global definition(s) of the token under cursor
@@ -313,14 +304,14 @@ if has("cscope")
     "   'f'   file:   open the filename under cursor
     "   'i'   includes: find files that include the filename under cursor
     "   'd'   called: find functions that function under cursor calls
-    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>	
-    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>	
-    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>	
-    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>	
-    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>	
-    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>	
+    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
     nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 endif
 
 "Template of diary

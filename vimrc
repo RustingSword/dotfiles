@@ -60,7 +60,7 @@ filetype plugin indent on
 set nocompatible
 syntax on
 "set history lines vim is to remember
-set history=300
+set history=1000
 
 "set mapleader
 let mapleader = ';'
@@ -129,7 +129,9 @@ set tabstop=4
 set smarttab
 
 set lbr
-set tw=80
+"highlight overlength
+set textwidth=80
+set colorcolumn=+1 " highlight column 81 (#textwidth+1)
 
 set ai " auto indent
 set si " smart indent
@@ -142,8 +144,6 @@ set omnifunc=syntaxcomplete#Complete
 "set dir to current
 "set bsdir=buffer
 "set autochdir
-"highlight OverLength ctermbg=darkred ctermfg=white guibg=#FFD9D9
-"match OverLength /\%>80v.\+/
 
 "set encoding
 set encoding=utf-8
@@ -161,28 +161,7 @@ else
 endif
 
 "set statusline
-"via http://www.douban.com/group/topic/15580471/
 set laststatus=2
-" 状态栏各个状态
-let statusHead ="%-.50f\ %h%m%r"
-let statusBreakPoint ="%<"
-let statusSeparator ="|"
-let statusFileType ="%{((&ft\ ==\ \"help\"\ \|\|\ &ft\ ==\ \"\")?\"\":\"[\".&ft.\"]\")}"
-let statusFileFormat ="[%{(&ff\ ==\ \"unix\")?\"u\":\"d\"}]"
-let statusAscii ="\{%b:0x%B\}"
-let statusCwd ="%-.50{getcwd()}"
-let statusBody =statusFileType.statusFileFormat.statusSeparator.statusAscii.statusSeparator."\ ".statusBreakPoint.statusCwd
-let statusEncoding ="[%{(&fenc\ ==\ \"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]"
-let statusBlank ="%="
-let statusKeymap ="%k"
-let statusRuler ="%-12.(%lL,%c%VC%)\ %P"
-let statusTime ="%{strftime(\"%Y-%m-%d\",getftime(expand(\"%\")))}"
-let statusEnd=statusKeymap."\ ".statusEncoding.statusRuler."\ ".statusTime
-"" 最终状态栏的模式字符串
-let statusString=statusHead.statusBody.statusBlank.statusEnd
-set statusline=%!statusString
-" Encoding related
-"set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
@@ -192,6 +171,12 @@ language messages zh_CN.utf-8
 "------------------------------------------
 "About Plugins
 "------------------------------------------
+
+" AirLine
+" let g:airline_theme='badwolf'
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline#extensions#tagbar#enabled = 1
 
 "commands of fencview plugin
 nmap <Leader>fa :FencAutoDetect<CR>
@@ -263,7 +248,6 @@ let g:miniBufExplMapCTabSwitchBufs = 1
 let g:miniBufExplMapWindowNavVim = 1
 
 "set Calendar
-map <Leader>ca :Calendar<CR>
 let g:calendar_navi='top'
 let g:calendar_mark='right'
 let g:cal_exit_onlywindow=1

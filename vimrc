@@ -54,6 +54,8 @@ Bundle 'tpope/vim-speeddating'
 Bundle 'Shougo/neocomplcache.vim'
 Bundle 'lilydjwg/fcitx.vim'
 Bundle 'matze/vim-move'
+Bundle 'uguu-org/vim-matrix-screensaver'
+Bundle 'vim-pandoc/vim-pandoc'
 "-----------------------------------------
 "General Settings
 "-----------------------------------------
@@ -119,7 +121,7 @@ set showmatch
 set noerrorbells
 "set novisualbell
 set t_vb=
-set vb
+set novisualbell
 
 "--------------------------------------------
 "text, tab and indent related
@@ -131,8 +133,13 @@ set tabstop=4
 set smarttab
 
 set lbr
-"highlight overlength
 set textwidth=80
+
+" Also break at a multi-byte character above 255, and don't insert a space
+" before or after a multi-byte character when joining lines
+set formatoptions+=mM
+
+"highlight overlength
 set colorcolumn=+1 " highlight column 81 (#textwidth+1)
 
 set ai " auto indent
@@ -185,21 +192,24 @@ nmap <Leader>fa :FencAutoDetect<CR>
 nmap <Leader>fv :FencView<CR>
 
 " set TagBar
-map <Leader>tb :Tagbar<CR>
+map <Leader>tb :TagbarToggle<CR>
 let g:tagbar_sort=0 "sort the tags according to their order in the source file
+let g:tagbar_width=26
+autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 
 " set Gundo
 nmap <Leader>u :GundoToggle<CR>
 
 "set NERDTree
 
-map <Leader>nt :NERDTree<CR>
+map <Leader>nt :NERDTreeToggle<CR>
+let g:NERDTreeWinSize=22
 
 "set LaTeX-Suit
 set shellslash
 let g:tex_flavor='latex'
 "set sw=2
-set iskeyword+=:
+set iskeyword-=:,_
 
 " translate the word under cursor
 function! SearchWord()
@@ -256,9 +266,10 @@ let g:cal_exit_onlywindow=1
 
 "integrate calendar with vimwiki
 let g:vimwiki_use_calendar=1
+nmap <Leader>vd :VimwikiToggleListItem<CR>
 
 "set LanguageTool
-let g:languagetool_jar='~/.langcheck/LanguageTool.jar'
+let g:languagetool_jar='~/.langcheck/languagetool-commandline.jar'
 
 " This tests to see if vim was configured with the '--enable-cscope' option
 " when it was compiled.  If it wasn't, time to recompile vim...
@@ -273,6 +284,7 @@ if has("cscope")
 
     " add any cscope database in current directory
     if filereadable("cscope.out")
+        cs kill -1
         cs add cscope.out
         " else add the database pointed to by environment variable
     elseif $CSCOPE_DB != ""

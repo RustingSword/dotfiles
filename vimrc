@@ -96,7 +96,14 @@ nmap <Space> <c-f>
 set t_Co=256
 
 "set colorscheme
-colo zenburn
+if(has('gui_running'))
+    colo zenburn
+else
+    "colo torte
+    colo zenburn
+    " set the background color of ColorColumn to light grey
+    hi ColorColumn ctermbg=238
+endif
 
 set showcmd		" display incomplete commands
 set go-=T
@@ -194,7 +201,7 @@ nmap <Leader>fv :FencView<CR>
 " set TagBar
 map <Leader>tb :TagbarToggle<CR>
 let g:tagbar_sort=0 "sort the tags according to their order in the source file
-let g:tagbar_width=26
+let g:tagbar_width=32
 autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 
 " set Gundo
@@ -203,7 +210,7 @@ nmap <Leader>u :GundoToggle<CR>
 "set NERDTree
 
 map <Leader>nt :NERDTreeToggle<CR>
-let g:NERDTreeWinSize=22
+let g:NERDTreeWinSize=32
 
 "set LaTeX-Suit
 set shellslash

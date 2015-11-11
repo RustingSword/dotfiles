@@ -3,9 +3,7 @@
 " set shell if using fish
 set shell=/bin/bash
 
-"-----------------------------------------
-" Using Vundle to manage all the plugins
-"-----------------------------------------
+" {{{ Using Vundle to manage all the plugins
 
 set nocompatible " be iMproved
 filetype off " required!
@@ -13,33 +11,28 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
-
-Bundle 'mattn/calendar-vim'
-Bundle 'LanguageTool'
-"Bundle 'minibufexpl.vim'
 Bundle 'fholgado/minibufexpl.vim'
-Bundle 'FencView.vim'
-Bundle 'vimwiki'
-"Bundle 'ledger/vim-ledger'
+Bundle 'fencview.vim'
 Bundle 'kien/ctrlp.vim'
+Bundle 'tpope/vim-speeddating'
+Bundle 'BufOnly.vim'
+
+" wiki and diary
+Bundle 'vimwiki/vimwiki'
+Bundle 'mattn/calendar-vim'
+
+" color schemes
+Bundle 'flazz/vim-colorschemes'
 
 " real-time syntax checking
 Bundle 'scrooloose/syntastic'
 
 Bundle 'bling/vim-airline'
-"Bundle 'Lokaltog/vim-powerline'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 
 " replace taglist
 Bundle 'majutsushi/tagbar'
-Bundle 'gerw/vim-latex-suite'
-
-" integrate git into vim
-Bundle 'tpope/vim-fugitive'
-
-" colorlize matching parentheses
-Bundle 'kien/rainbow_parentheses.vim'
 
 " visualize undolist
 Bundle 'sjl/gundo.vim.git'
@@ -47,29 +40,23 @@ Bundle 'sjl/gundo.vim.git'
 " add/delete/change parentheses
 Bundle 'tpope/vim-surround'
 Bundle 'Raimondi/delimitMate'
-" use ctrl-a ctrl-x to change date/time
-Bundle 'tpope/vim-speeddating'
-Bundle 'SirVer/ultisnips'
+
 Bundle 'honza/vim-snippets'
-"Bundle 'Shougo/neocomplcache.vim'
 Bundle 'Shougo/neocomplete.vim'
-Bundle 'lilydjwg/fcitx.vim'
-Bundle 'matze/vim-move'
-Bundle 'uguu-org/vim-matrix-screensaver'
-Bundle 'vim-pandoc/vim-pandoc'
-Bundle 'derekwyatt/vim-scala'
-"-----------------------------------------
-"General Settings
-"-----------------------------------------
+Bundle 'rust-lang/rust.vim'
+Bundle 'airblade/vim-gitgutter'
+" }}}
+" {{{ General Settings
 
 filetype plugin indent on
 set nocompatible
 syntax on
 "set history lines vim is to remember
-set history=1000
+set history=10000
 
 "set mapleader
 let mapleader = ';'
+let maplocalleader = ';'
 let g:mapleader = ';'
 
 "auto read when files are changed
@@ -82,7 +69,7 @@ set noswapfile
 " Some key maps
 "
 "insert current time
-map <F6> <Esc>a<c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr><Esc>
+"map <F6> <Esc>a<c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr><Esc>
 
 "fast editing vimrc
 nmap <Leader>ev :e $MYVIMRC<CR>
@@ -91,47 +78,45 @@ nmap <Leader>ev :e $MYVIMRC<CR>
 autocmd! bufwritepost .vimrc source $MYVIMRC
 
 nmap <Space> <c-f>
-
-"--------------------------------------------------
-"VIM user interface
-"--------------------------------------------------
+" }}}
+" {{{ VIM user interface
 set t_Co=256
 
 "set colorscheme
 if(has('gui_running'))
-    set guifont=Monaco
-    colo zenburn
-    hi Pmenu                    guibg=#606060
-    hi PmenuSel                 guifg=#dddd00 guibg=#1f82cd
-    hi PmenuSbar                guibg=#d6d6d6
-    hi PmenuThumb               guifg=#3cac3c
+    set guifont=Source\ Code\ Pro:h14
+    colorscheme solarized
+    "hi Pmenu                    guibg=#606060
+    "hi PmenuSel                 guifg=#dddd00 guibg=#1f82cd
+    "hi PmenuSbar                guibg=#d6d6d6
+    "hi PmenuThumb               guifg=#3cac3c
 else
     "colo torte
     colo slate
     highlight Pmenu ctermbg=8
     highlight PmenuSel ctermbg=1
     highlight PmenuSbar ctermbg=0
+    hi Search ctermfg=gray ctermbg=18
     " set the background color of ColorColumn to light grey
     hi ColorColumn ctermbg=238
 endif
 
-set showcmd		" display incomplete commands
-set go-=T
-"set 50 lines to the cursors to make the cursor always in the middle of the
+set showcmd     " display incomplete commands
+"set 100 lines to the cursors to make the cursor always in the middle of the
 "screen
-set so=50
+set so=100
 set wildmenu " turn on wild menu for command line completion
-set ruler		" show the cursor position all the time
+set ruler       " show the cursor position all the time
 set cmdheight=1
 set hid "change buffer, without saving
-set number		" show line number
+set number      " show line number
 
 "set backspace config
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
 set whichwrap+=<,>,h,l
 
 set hlsearch
-set incsearch		" do incremental searching
+set incsearch       " do incremental searching
 
 set showmatch
 
@@ -140,15 +125,16 @@ set noerrorbells
 "set novisualbell
 set t_vb=
 set novisualbell
-
-"--------------------------------------------
-"text, tab and indent related
-"--------------------------------------------
+" }}}
+" {{{ text, tab and indent related
 
 set expandtab
-set shiftwidth=4
-set tabstop=4
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2
 set smarttab
+set list
+set listchars=tab:>-,trail:-
 
 set lbr
 set textwidth=80
@@ -166,7 +152,6 @@ set ambiwidth=double
 set cindent
 set nowb " no write backup
 set omnifunc=syntaxcomplete#Complete
-"set patchmode=.orig	"backup the original file with a ext name .orig
 
 "set dir to current
 "set bsdir=buffer
@@ -193,23 +178,31 @@ set laststatus=2
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 language messages zh_CN.utf-8
-
-"------------------------------------------
-"Editing
-"------------------------------------------
-" Uncomment the following to have Vim jump to the last position when 
+" }}}
+" {{{ Editing
+" Uncomment the following to have Vim jump to the last position when
 " reopening a file
 if has("autocmd")
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-                \| exe "normal! g'\"" | endif
+                \| exe "normal! g`\"" | endif
 endif
 
 inoremap <c-e> <Esc>A
 inoremap <c-a> <Esc>I
 
-"------------------------------------------
-"About Plugins
-"------------------------------------------
+nnoremap n nzz
+nnoremap N Nzz
+
+au bufreadpost *.txt set complete+=k dictionary=/usr/share/dict/words
+au bufnewfile *.txt set complete+=k dictionary=/usr/share/dict/words
+" }}}
+" {{{ Plugin setup
+
+" GitGutter
+nmap <leader>gv :GitGutterPreviewHunk<CR>
+nmap <leader>gu :GitGutterUndoHunk<CR>
+nmap <leader>gn :GitGutterNextHunk<CR>
+nmap <leader>gp :GitGutterPrevHunk<CR>"
 
 " AirLine
 " let g:airline_theme='badwolf'
@@ -227,7 +220,11 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_check_header = 1
 let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+
+let g:syntastic_mode_map = {'mode' : 'passive', 'active_filetypes' : [], 'passive_filetypes' : []}
+nnoremap <Leader>st :SyntasticToggleMode<CR>
 
 "commands of fencview plugin
 nmap <Leader>fa :FencAutoDetect<CR>
@@ -237,86 +234,18 @@ nmap <Leader>fv :FencView<CR>
 map <Leader>tt :TagbarToggle<CR>
 let g:tagbar_sort=0 "sort the tags according to their order in the source file
 let g:tagbar_width=32
-autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
+autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py call tagbar#autoopen()
 
-" ultisnips
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-"let g:UltiSnipsalways_use_first_snippet = 1
 " set Gundo
 nmap <Leader>u :GundoToggle<CR>
 
 "set NERDTree
-
 map <Leader>nt :NERDTreeToggle<CR>
 let g:NERDTreeWinSize=32
-
-"set LaTeX-Suit
-set shellslash
-let g:tex_flavor='latex'
-"set sw=2
-set iskeyword-=:,_
-
-" translate the word under cursor
-function! SearchWord()
-    let expr = '!ydcv -s ' .expand("<cword>")
-    exec expr
-endfunction
-
-" translate selected text
-function! SearchWord_v(type, ...)
-    let sel_save = &selection
-    let &selection = "inclusive"
-    let reg_save = @@
-
-    if a:0
-        silent exe "normal! `<" . a:type . "`>y"
-    elseif a:type == 'line'
-        silent exe "normal! '[V']y"
-    elseif a:type == 'block'
-        silent exe "normal! `[\<C-V>`]y"
-    else
-        silent exe "normal! `[v`]y"
-    endif
-
-    let word = @@
-    let expr = '!ydcv -s "' . word . '"'
-    exec expr
-
-    let &selection = sel_save
-    let @@ = reg_save
-endfunction
-
-nnoremap <Leader>d :call SearchWord()<CR>
-vnoremap <Leader>d :<C-U>call SearchWord_v(visualmode(), 1)<cr>
-
-" forward search for tex files
-function! SyncTexForward()
-    let s:syncfile = fnamemodify(fnameescape(Tex_GetMainFileName()), ":r").".pdf"
-    let execstr = "silent !okular --unique ".s:syncfile."\\#src:".line(".").expand("%\:p").' &'
-    exec execstr
-endfunction
-nmap <Leader>f :call SyncTexForward()<CR>
-
-"set SuperTab
-"let g:SuperTabRetainCompletionType=2
 
 "set MiniBufExplorer
 let g:miniBufExplMapCTabSwitchBufs = 1
 let g:miniBufExplMapWindowNavVim = 1
-
-"set Calendar
-let g:calendar_navi='top'
-let g:calendar_mark='right'
-let g:cal_exit_onlywindow=1
-
-"integrate calendar with vimwiki
-let g:vimwiki_use_calendar=1
-nmap <Leader>vd :VimwikiToggleListItem<CR>
-
-"set LanguageTool
-let g:languagetool_jar='~/.langcheck/languagetool-commandline.jar'
 
 " This tests to see if vim was configured with the '--enable-cscope' option
 " when it was compiled.  If it wasn't, time to recompile vim...
@@ -359,78 +288,7 @@ if has("cscope")
     nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 endif
 
-" Neocomplete
-"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-  " For no inserting <CR> key.
-  "return pumvisible() ? "\<C-y>" : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
-
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-" For perlomni.vim setting.
-" https://github.com/c9s/perlomni.vim
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-"---------------------------------------
-"Other Settings
-"---------------------------------------
+" }}}
+" {{{ Other settings
+" }}}
+" vim: fdm=marker

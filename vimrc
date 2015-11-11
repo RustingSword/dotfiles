@@ -49,13 +49,15 @@ Bundle 'tpope/vim-surround'
 Bundle 'Raimondi/delimitMate'
 " use ctrl-a ctrl-x to change date/time
 Bundle 'tpope/vim-speeddating'
-"Bundle 'MarcWeber/ultisnips'
-"Bundle 'honza/vim-snippets'
-Bundle 'Shougo/neocomplcache.vim'
+Bundle 'SirVer/ultisnips'
+Bundle 'honza/vim-snippets'
+"Bundle 'Shougo/neocomplcache.vim'
+Bundle 'Shougo/neocomplete.vim'
 Bundle 'lilydjwg/fcitx.vim'
 Bundle 'matze/vim-move'
 Bundle 'uguu-org/vim-matrix-screensaver'
 Bundle 'vim-pandoc/vim-pandoc'
+Bundle 'derekwyatt/vim-scala'
 "-----------------------------------------
 "General Settings
 "-----------------------------------------
@@ -97,18 +99,27 @@ set t_Co=256
 
 "set colorscheme
 if(has('gui_running'))
+    set guifont=Monaco
     colo zenburn
+    hi Pmenu                    guibg=#606060
+    hi PmenuSel                 guifg=#dddd00 guibg=#1f82cd
+    hi PmenuSbar                guibg=#d6d6d6
+    hi PmenuThumb               guifg=#3cac3c
 else
     "colo torte
-    colo zenburn
+    colo slate
+    highlight Pmenu ctermbg=8
+    highlight PmenuSel ctermbg=1
+    highlight PmenuSbar ctermbg=0
     " set the background color of ColorColumn to light grey
     hi ColorColumn ctermbg=238
 endif
 
 set showcmd		" display incomplete commands
 set go-=T
-"set 7 lines to the cursors
-set so=7
+"set 50 lines to the cursors to make the cursor always in the middle of the
+"screen
+set so=50
 set wildmenu " turn on wild menu for command line completion
 set ruler		" show the cursor position all the time
 set cmdheight=1
@@ -173,7 +184,7 @@ if has("win32")
     "set fileencoding=chinese
     au GUIEnter * simalt ~x
 else
-    set guifont=Monaco\ 12
+    set guifont=Monaco:h12
 endif
 
 "set statusline
@@ -183,6 +194,18 @@ source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 language messages zh_CN.utf-8
 
+"------------------------------------------
+"Editing
+"------------------------------------------
+" Uncomment the following to have Vim jump to the last position when 
+" reopening a file
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+                \| exe "normal! g'\"" | endif
+endif
+
+inoremap <c-e> <Esc>A
+inoremap <c-a> <Esc>I
 
 "------------------------------------------
 "About Plugins
@@ -194,16 +217,33 @@ let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
 
+" syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+
 "commands of fencview plugin
 nmap <Leader>fa :FencAutoDetect<CR>
 nmap <Leader>fv :FencView<CR>
 
 " set TagBar
-map <Leader>tb :TagbarToggle<CR>
+map <Leader>tt :TagbarToggle<CR>
 let g:tagbar_sort=0 "sort the tags according to their order in the source file
 let g:tagbar_width=32
 autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 
+" ultisnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"let g:UltiSnipsalways_use_first_snippet = 1
 " set Gundo
 nmap <Leader>u :GundoToggle<CR>
 
@@ -319,78 +359,58 @@ if has("cscope")
     nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 endif
 
-"Template of diary
-"autocmd BufNewFile *.txt read $vimruntime\templates\diary.tpl | normal ggdd
-
+" Neocomplete
 "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
-" Use neocomplcache.
-let g:neocomplcache_enable_at_startup = 1
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
 " Use smartcase.
-let g:neocomplcache_enable_smart_case = 1
+let g:neocomplete#enable_smart_case = 1
 " Set minimum syntax keyword length.
-let g:neocomplcache_min_syntax_length = 3
-let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-
-" Enable heavy features.
-" Use camel case completion.
-"let g:neocomplcache_enable_camel_case_completion = 1
-" Use underbar completion.
-"let g:neocomplcache_enable_underbar_completion = 1
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
 " Define dictionary.
-let g:neocomplcache_dictionary_filetype_lists = {
+let g:neocomplete#sources#dictionary#dictionaries = {
     \ 'default' : '',
     \ 'vimshell' : $HOME.'/.vimshell_hist',
     \ 'scheme' : $HOME.'/.gosh_completions'
         \ }
 
 " Define keyword.
-if !exists('g:neocomplcache_keyword_patterns')
-    let g:neocomplcache_keyword_patterns = {}
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
 endif
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
 " Plugin key-mappings.
-inoremap <expr><C-g>     neocomplcache#undo_completion()
-inoremap <expr><C-l>     neocomplcache#complete_common_string()
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
 
 " Recommended key-mappings.
 " <CR>: close popup and save indent.
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
-  return neocomplcache#smart_close_popup() . "\<CR>"
+  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
   " For no inserting <CR> key.
-  "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+  "return pumvisible() ? "\<C-y>" : "\<CR>"
 endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplcache#close_popup()
-inoremap <expr><C-e>  neocomplcache#cancel_popup()
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 " Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
-
-" For cursor moving in insert mode(Not recommended)
-"inoremap <expr><Left>  neocomplcache#close_popup() . "\<Left>"
-"inoremap <expr><Right> neocomplcache#close_popup() . "\<Right>"
-"inoremap <expr><Up>    neocomplcache#close_popup() . "\<Up>"
-"inoremap <expr><Down>  neocomplcache#close_popup() . "\<Down>"
-" Or set this.
-"let g:neocomplcache_enable_cursor_hold_i = 1
-" Or set this.
-"let g:neocomplcache_enable_insert_char_pre = 1
+"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
 " AutoComplPop like behavior.
-"let g:neocomplcache_enable_auto_select = 1
+"let g:neocomplete#enable_auto_select = 1
 
 " Shell like behavior(not recommended).
 "set completeopt+=longest
-"let g:neocomplcache_enable_auto_select = 1
-"let g:neocomplcache_disable_auto_complete = 1
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
 "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
 " Enable omni completion.
@@ -401,16 +421,16 @@ autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " Enable heavy omni completion.
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
 endif
-let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
 " For perlomni.vim setting.
 " https://github.com/c9s/perlomni.vim
-let g:neocomplcache_omni_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 "---------------------------------------
 "Other Settings
 "---------------------------------------

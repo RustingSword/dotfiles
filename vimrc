@@ -10,6 +10,7 @@ filetype off " required!
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
+Bundle 'rhysd/vim-clang-format'
 Bundle 'gmarik/vundle'
 Bundle 'fholgado/minibufexpl.vim'
 Bundle 'fencview.vim'
@@ -129,9 +130,9 @@ set novisualbell
 " {{{ text, tab and indent related
 
 set expandtab
-set shiftwidth=2
-set tabstop=2
-set softtabstop=2
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
 set smarttab
 set list
 set listchars=tab:>-,trail:-
@@ -209,6 +210,7 @@ nmap <leader>gp :GitGutterPrevHunk<CR>"
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
+let g:airline_powerline_fonts = 1
 
 " syntastic
 set statusline+=%#warningmsg#
@@ -235,6 +237,19 @@ map <Leader>tt :TagbarToggle<CR>
 let g:tagbar_sort=0 "sort the tags according to their order in the source file
 let g:tagbar_width=32
 autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py call tagbar#autoopen()
+
+" set Vim Clang Formatter
+let g:clang_format#style_options = {
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11"}
+
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" Toggle auto formatting:
+nmap <Leader>C :ClangFormatAutoToggle<CR>
 
 " set Gundo
 nmap <Leader>u :GundoToggle<CR>

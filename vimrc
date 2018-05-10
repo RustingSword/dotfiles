@@ -1,57 +1,60 @@
 " Vim settings
 
-" set shell if using fish
-set shell=/bin/bash
+" auto install vim-plug
+" see: https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-" {{{ Using Vundle to manage all the plugins
-
-set nocompatible " be iMproved
-filetype off " required!
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-Bundle 'rhysd/vim-clang-format'
-Bundle 'gmarik/vundle'
-Bundle 'fholgado/minibufexpl.vim'
-Bundle 'fencview.vim'
-Bundle 'kien/ctrlp.vim'
-Bundle 'tpope/vim-speeddating'
-Bundle 'BufOnly.vim'
+" {{{ Using vim-plug to manage all the plugins
+call plug#begin('~/.vim/bundle')
+Plug 'nacitar/a.vim'
+Plug 'rhysd/vim-clang-format'
+Plug 'fholgado/minibufexpl.vim'
+Plug 'mbbill/fencview'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tpope/vim-speeddating'
+Plug 'schickling/vim-bufonly'
 
 " wiki and diary
-Bundle 'vimwiki/vimwiki'
-Bundle 'mattn/calendar-vim'
+Plug 'vimwiki/vimwiki'
+Plug 'mattn/calendar-vim'
 
 " color schemes
-Bundle 'flazz/vim-colorschemes'
+Plug 'flazz/vim-colorschemes'
 
-" real-time syntax checking
-Bundle 'scrooloose/syntastic'
-
-Bundle 'bling/vim-airline'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/nerdtree'
+Plug 'bling/vim-airline'
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
 " replace taglist
-Bundle 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 
 " visualize undolist
-Bundle 'sjl/gundo.vim.git'
+Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 
 " add/delete/change parentheses
-Bundle 'tpope/vim-surround'
-Bundle 'Raimondi/delimitMate'
+Plug 'tpope/vim-surround'
+Plug 'Raimondi/delimitMate'
 
-Bundle 'honza/vim-snippets'
-Bundle 'Shougo/neocomplete.vim'
-Bundle 'rust-lang/rust.vim'
-Bundle 'airblade/vim-gitgutter'
+Plug 'honza/vim-snippets'
+Plug 'Shougo/neocomplete.vim'
+Plug 'rust-lang/rust.vim'
+Plug 'mhinz/vim-signify'
+
+" compile
+Plug 'skywind3000/asyncrun.vim'
+
+" syntastic check
+Plug 'w0rp/ale'
+call plug#end()
 " }}}
+
 " {{{ General Settings
 
-filetype plugin indent on
-set nocompatible
-syntax on
 "set history lines vim is to remember
 set history=10000
 
@@ -111,6 +114,7 @@ set ruler       " show the cursor position all the time
 set cmdheight=1
 set hid "change buffer, without saving
 set number      " show line number
+set nosmd       " don't show current mode (we use airline already)
 
 "set backspace config
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
@@ -208,25 +212,8 @@ nmap <leader>gp :GitGutterPrevHunk<CR>"
 " AirLine
 " let g:airline_theme='badwolf'
 let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline_powerline_fonts = 1
-
-" syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_cpp_compiler = 'clang++'
-let g:syntastic_cpp_check_header = 1
-let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
-
-let g:syntastic_mode_map = {'mode' : 'passive', 'active_filetypes' : [], 'passive_filetypes' : []}
-nnoremap <Leader>st :SyntasticToggleMode<CR>
 
 "commands of fencview plugin
 nmap <Leader>fa :FencAutoDetect<CR>
@@ -236,7 +223,7 @@ nmap <Leader>fv :FencView<CR>
 map <Leader>tt :TagbarToggle<CR>
 let g:tagbar_sort=0 "sort the tags according to their order in the source file
 let g:tagbar_width=32
-autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py call tagbar#autoopen()
+" autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py call tagbar#autoopen()
 
 " set Vim Clang Formatter
 let g:clang_format#style_options = {
@@ -303,6 +290,44 @@ if has("cscope")
     nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 endif
 
+" vimwiki
+nnoremap <Leader><Space> :VimwikiToggleListItem<cr>
+
+" AsyncRun
+" 自动打开 quickfix window ，高度为 6
+let g:asyncrun_open = 6
+
+" 任务结束时候响铃提醒
+let g:asyncrun_bell = 1
+
+" 设置 F10 打开/关闭 Quickfix 窗口
+nnoremap <F10> :call asyncrun#quickfix_toggle(6)<cr>
+
+" ALE
+let g:ale_linters_explicit = 1
+let g:ale_completion_delay = 500
+let g:ale_echo_delay = 20
+let g:ale_lint_delay = 500
+let g:ale_echo_msg_format = '[%linter%] %code: %%s'
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:airline#extensions#ale#enabled = 1
+
+let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
+let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
+let g:ale_c_cppcheck_options = ''
+let g:ale_cpp_cppcheck_options = ''
+
+let g:ale_sign_error = "\ue009\ue009"
+hi! clear SpellBad
+hi! clear SpellCap
+hi! clear SpellRare
+hi! SpellBad gui=undercurl guisp=red
+hi! SpellCap gui=undercurl guisp=blue
+hi! SpellRare gui=undercurl guisp=magenta
+
+" LeaderF
+nnoremap <M-F> :LeaderfFunction!<cr>
 " }}}
 " {{{ Other settings
 " }}}

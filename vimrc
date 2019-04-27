@@ -180,9 +180,6 @@ endif
 "set statusline
 set laststatus=2
 
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
-language messages zh_CN.utf-8
 " }}}
 " {{{ Editing
 " Uncomment the following to have Vim jump to the last position when
@@ -203,17 +200,10 @@ au bufnewfile *.txt set complete+=k dictionary=/usr/share/dict/words
 " }}}
 " {{{ Plugin setup
 
-" GitGutter
-nmap <leader>gv :GitGutterPreviewHunk<CR>
-nmap <leader>gu :GitGutterUndoHunk<CR>
-nmap <leader>gn :GitGutterNextHunk<CR>
-nmap <leader>gp :GitGutterPrevHunk<CR>"
-
 " AirLine
 " let g:airline_theme='badwolf'
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
-let g:airline_powerline_fonts = 1
 
 "commands of fencview plugin
 nmap <Leader>fa :FencAutoDetect<CR>
@@ -318,7 +308,6 @@ let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
 let g:ale_c_cppcheck_options = ''
 let g:ale_cpp_cppcheck_options = ''
 
-let g:ale_sign_error = "\ue009\ue009"
 hi! clear SpellBad
 hi! clear SpellCap
 hi! clear SpellRare
@@ -326,8 +315,6 @@ hi! SpellBad gui=undercurl guisp=red
 hi! SpellCap gui=undercurl guisp=blue
 hi! SpellRare gui=undercurl guisp=magenta
 
-" LeaderF
-nnoremap <M-F> :LeaderfFunction!<cr>
 " }}}
 " {{{ Other settings
 " }}}

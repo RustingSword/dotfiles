@@ -16,7 +16,7 @@ git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/z
 cat << 'EOF' > ~/.zshrc
 export ZSH="/home/orz/.oh-my-zsh"
 ZSH_THEME="fishy"
-plugins=(z zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git z zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 EOF
 

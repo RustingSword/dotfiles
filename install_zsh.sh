@@ -16,7 +16,7 @@ git clone https://github.com/larkery/zsh-histdb $HOME/.oh-my-zsh/custom/plugins/
 cat << 'EOF' > ~/.zshrc
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="fishy"
-plugins=(git z zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git z zsh-autosuggestions zsh-syntax-highlighting zsh-histdb)
 source $ZSH/oh-my-zsh.sh
 EOF
 
